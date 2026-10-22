@@ -100,7 +100,10 @@ namespace DSPStarMapMemo
         [HarmonyPatch(typeof(UIStarDetail), "_OnOpen")]
         public static void UIStarDetail_OnOpen_Postfix(UIStarDetail __instance)
         {
-            UI.MemoWindowOpen(__instance.star.id);
+            if (UIGame.viewMode != EViewMode.Sail)
+            {
+                UI.MemoWindowOpen(__instance.star.id);
+            }
         }
 
         //情報ウインドウの表示 planet
@@ -108,7 +111,10 @@ namespace DSPStarMapMemo
         [HarmonyPatch(typeof(UIPlanetDetail), "_OnOpen")]
         public static void UIPlanetDetail_OnOpen_Postfix(UIPlanetDetail __instance)
         {
-            UI.MemoWindowOpen(__instance.planet.id);
+            if (UIGame.viewMode != EViewMode.Sail)
+            {
+                UI.MemoWindowOpen(__instance.planet.id);
+            }
         }
 
         //情報ウインドウの非表示

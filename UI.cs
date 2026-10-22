@@ -18,8 +18,6 @@ using System.Security;
 using System.Security.Permissions;
 using static UnityEngine.GUILayout;
 using UnityEngine.Rendering;
-using Steamworks;
-using rail;
 using xiaoye97;
 
 namespace DSPStarMapMemo
@@ -101,6 +99,15 @@ namespace DSPStarMapMemo
             //メモ編集ウインドウ作成
             GameObject planetdetailwindow = UIRoot.instance.uiGame.planetDetail.gameObject;
             memoWindow = Instantiate(planetdetailwindow, planetdetailwindow.transform.parent);
+            //0.10.x UI 适配（移植自 0.0.7）：black-bg 尺寸/位置 + 移除 detail-tabs
+            var blackBg = memoWindow.transform.Find("black-bg");
+            if (blackBg != null)
+            {
+                blackBg.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(-30f, 40f);
+                blackBg.localPosition = new Vector3(-105f, -105f, 0f);
+                var detailTabs = blackBg.Find("detail-tabs");
+                if (detailTabs != null) Destroy(detailTabs.gameObject);
+            }
             //不要なオブジェクト等の削除
             var keepTransformList = new List<string> { "black-bg" , "type-text" };
             var keepComponentList = new List<Type>() { typeof(RectTransform) };
@@ -109,7 +116,6 @@ namespace DSPStarMapMemo
             memoWindow.name = "memoWindow";
             memoWindow.transform.localPosition = new Vector3(0, -300, 0);
             GameObject typeText = memoWindow.transform.Find("type-text").gameObject;
-            Destroy(typeText.transform.Find("tip-btn").gameObject);
             typeText.transform.localPosition = new Vector3(-240, -3, 0);
             typeText.name = "typeText";
             typeText.GetComponent<Text>().text = "Memo".Translate();
