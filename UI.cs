@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,7 +73,12 @@ namespace DSPStarMapMemo
             memoText.GetComponent<RectTransform>().sizeDelta = new Vector3(300, 150, 0);
             memoText.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
             memoText.GetComponent<Text>().lineSpacing = 0.8f;
-            //克隆自恒星名文本，可能带有 Localizer（OnEnable 时会用翻译覆盖我们自己设置的内容）
+            //克隆自恒星/行星名文本，子物体（原版 marker-icons 及其溢出提示 "..."）会被一起复制，且游戏只管理原件，全部移除
+            for (int i = memoText.transform.childCount - 1; i >= 0; i--)
+            {
+                Destroy(memoText.transform.GetChild(i).gameObject);
+            }
+            //克隆体可能带有 Localizer（OnEnable 时会用翻译覆盖我们自己设置的内容）
             var memoTextLocalizer = memoText.GetComponent<Localizer>();
             if (memoTextLocalizer != null)
             {
