@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,9 +35,13 @@ namespace DSPStarMapMemo
 
     public class Main : BaseUnityPlugin , IModCanSave
     {
+        public static ConfigEntry<int> MemoFontSize;
+
         public void Start()
         {
             LogManager.Logger = Logger;
+            MemoFontSize = Config.Bind("General", "MemoFontSize", 0,
+                "星图备忘录文字字号。0 = 使用原版字号（建议 20~32） / Font size of the memo text. 0 = vanilla size.");
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
 
             UI.Create();

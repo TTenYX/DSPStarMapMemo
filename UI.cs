@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,6 +73,16 @@ namespace DSPStarMapMemo
             memoText.GetComponent<RectTransform>().sizeDelta = new Vector3(300, 150, 0);
             memoText.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
             memoText.GetComponent<Text>().lineSpacing = 0.8f;
+            //克隆自恒星名文本，可能带有 Localizer（OnEnable 时会用翻译覆盖我们自己设置的内容）
+            var memoTextLocalizer = memoText.GetComponent<Localizer>();
+            if (memoTextLocalizer != null)
+            {
+                Destroy(memoTextLocalizer);
+            }
+            if (Main.MemoFontSize.Value > 0)
+            {
+                memoText.GetComponent<Text>().fontSize = Main.MemoFontSize.Value;
+            }
             memoText.SetActive(false);
 
             iconPrefab.AddComponent<RectTransform>().sizeDelta = new Vector3(28, 28, 0);
@@ -147,7 +157,7 @@ namespace DSPStarMapMemo
             Text valueText = descBox.transform.Find("value-text").GetComponent<Text>();
             valueText.alignment = TextAnchor.UpperLeft;
             valueText.lineSpacing = 0.8f;
-            valueText.fontSize = 20;
+            valueText.fontSize = Main.MemoFontSize.Value > 0 ? Main.MemoFontSize.Value : 20;
 
             memoWindow.SetActive(false);
 
